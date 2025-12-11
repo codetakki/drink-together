@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.roomData" class="d-flex flex-column" style="overflow-y: hidden; height: 100vh;">
+  <div v-if="store.roomData" class="d-flex flex-column" style="overflow-y: hidden; height: 100%;">
     <v-toolbar density="compact">
       <template #prepend><v-btn color="default" icon="mdi-arrow-left" to="/" /></template>
       <v-toolbar-title :text="'Room: ' + store.roomData?.code">
@@ -18,10 +18,9 @@
       </v-card-text>
     </v-card>
   </div>
-  {{ store.roomData }}
   <template v-if="!store.roomData">
     <div class="w-100 d-flex flex-column align-center justify-center" style="overflow-y: hidden; height: 100vh;">
-      <div v-if="!store.isFetching">
+      <div v-if="!store.isFetching" class="d-flex flex-column align-center">
         <div class="text-h4 mb-5">No room with code {{ store.roomCode }} found </div>
         <v-btn size="x-large" to="/">Back to start</v-btn>
       </div>
