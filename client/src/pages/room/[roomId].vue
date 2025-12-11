@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.roomData" class="d-flex flex-column" style="overflow-y: hidden; height: 100%;">
+  <div v-if="store.roomData" class="d-flex flex-column" style="overflow-y: hidden; height: 100vh; max-height: 100%;">
     <v-toolbar density="compact">
       <template #prepend><v-btn color="default" icon="mdi-arrow-left" to="/" /></template>
       <v-toolbar-title :text="'Room: ' + store.roomData?.code">
@@ -7,7 +7,8 @@
       </v-toolbar-title>
       <AddPlayer :room-code="store.roomData?.code" @done="store.fetchRoom()" />
     </v-toolbar>
-    <div class="overflow-auto pa-4 h-100">
+    <!-- Middle scrollable content -->
+    <div class="overflow-auto pa-4 flex-grow-1">
       <div class="d-flex flex-column ga-4">
         <PlayerCard v-for="player, i in store.roomData?.users" :key="player.id" :index="i" :player="player" />
       </div>
