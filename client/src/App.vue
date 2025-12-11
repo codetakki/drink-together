@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column overflow-y-hidden" style="height: 100%; max-height: 100vh;">
+  <div class="d-flex flex-column overflow-y-hidden" style="height: 100%; max-height: 100dvh;">
     <router-view />
   </div>
 </template>
