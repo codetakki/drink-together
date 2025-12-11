@@ -13,6 +13,7 @@ import { RoomEntity } from '../entity/room.entity';
 import { In, Repository } from 'typeorm';
 import { UserEntity } from 'src/user/user.entity';
 import { DrinkEntity } from 'src/drink/drink.entity';
+import { RoomsGateway } from 'src/websocket/rooms.gateway';
 
 @Controller('room')
 export class RoomController {
@@ -20,9 +21,10 @@ export class RoomController {
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,    
+    private userRepository: Repository<UserEntity>,
     @InjectRepository(DrinkEntity)
     private drinkRepository: Repository<DrinkEntity>,
+    private readonly roomsGateway: RoomsGateway,
   ) {}
 
   /**
@@ -87,6 +89,7 @@ export class RoomController {
 
     const newRoom = await this.roomRepository.save(room);
     console.log(newRoom);
+    this.roomsGateway.refreshRoom(room.code);
     return newRoom;
   }
 
@@ -106,6 +109,8 @@ export class RoomController {
       ...currentRoom,
       ...updatedRoom,
     });
+    this.roomsGateway.refreshRoom(params.code);
+
     return;
   }
 
@@ -116,7 +121,7 @@ export class RoomController {
       where: {
         id: In(players),
       },
-      relations: ['drinks'],
+      relations: ['drinks', 'room'],
     });
     const updatedUsers: UserEntity[] = users.map((user) => {
       if (!user.drinks) {
@@ -127,6 +132,9 @@ export class RoomController {
       return user;
     });
     const result = await this.userRepository.save(updatedUsers);
+    const room_code = updatedUsers[0].room.code;
+    this.roomsGateway.refreshRoom(room_code);
+
     return {
       message: 'Drinks added successfully to users.',
       updatedUsers: result,

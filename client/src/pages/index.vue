@@ -1,6 +1,6 @@
 <template>
   <v-text-field v-model="roomCode" label="Room code" />
-  <v-btn block>Join room</v-btn>
+  <v-btn block @click="router.push('/room/'+roomCode)">Join room</v-btn>
   or
   <v-btn block color="primary" variant="outlined" @click="createRoom()">Create Room</v-btn>
   <pre>{{ data }}</pre>

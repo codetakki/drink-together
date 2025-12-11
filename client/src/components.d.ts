@@ -14,6 +14,7 @@ declare module 'vue' {
     AddDrink: typeof import('./components/AddDrink.vue')['default']
     AddPlayer: typeof import('./components/AddPlayer.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    BeverageUnitSelect: typeof import('./components/BeverageUnitSelect.vue')['default']
     Confirm: typeof import('./components/Confirm.vue')['default']
     DrinkForm: typeof import('./components/DrinkForm.vue')['default']
     EditPlayer: typeof import('./components/EditPlayer.vue')['default']

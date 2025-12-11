@@ -40,6 +40,11 @@ export default createVuetify({
       rounded: 'lg',
 
     },
+    VCombobox: {
+      variant: 'solo-filled',
+      density: 'comfortable',
+      rounded: 'lg',
+    },
     VAutocomplete: {
       variant: 'solo-filled',
       density: 'comfortable',

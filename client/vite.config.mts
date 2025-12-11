@@ -15,7 +15,7 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-
+  base: '/c',
   plugins: [
     vueDevTools(),
 
@@ -56,7 +56,7 @@ export default defineConfig({
           {
             name: 'Roboto',
             weights: [100, 300, 400, 500, 700, 900],
-            styles: ['normal', 'italic'],
+            styles: ['normal'],
           },
         ],
       },

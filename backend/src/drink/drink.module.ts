@@ -4,9 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomEntity } from 'src/room/entity/room.entity';
 import { UserEntity } from 'src/user/user.entity';
 import { DrinkEntity } from './drink.entity';
+import { WebSocketModule } from 'src/websocket/websocket.module';
 
 @Module({
   controllers: [DrinkController],
-  imports: [TypeOrmModule.forFeature([UserEntity, DrinkEntity, RoomEntity])],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, DrinkEntity, RoomEntity]),
+    WebSocketModule,
+  ],
 })
 export class DrinkModule {}

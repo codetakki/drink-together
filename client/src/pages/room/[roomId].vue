@@ -21,9 +21,11 @@
 <script setup lang="ts">
   import type { Room } from '@/types'
   import { reactifyObject } from '@vueuse/core'
+  import { io } from 'socket.io-client'
   import { appFetch, useAppStore } from '@/stores/app'
 
   const store = useAppStore()
+  // 1. Connect
 </script>
 
 <style></style>

@@ -1,8 +1,6 @@
 <template>
   <v-text-field v-model="drink.title" label="Drink name" :rules="[required]" />
-  <v-text-field v-model.number="drink.amountMl" label="Drink Amount (ml)" :rules="[amountRules, required]">
-    <template #append-inner>ML </template>
-  </v-text-field>
+  <beverage-unit-select v-model="drink.amountMl" />
   <v-text-field
     v-model.number="drink.percentageAlcohol"
     append-inner-icon="mdi-percent"

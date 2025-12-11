@@ -7,16 +7,16 @@ import {
   Post,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RoomEntity } from 'src/room/entity/room.entity';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { RoomsGateway } from 'src/websocket/rooms.gateway';
 
 @Controller('user')
 export class UserController {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private readonly roomsGateway: RoomsGateway,
   ) {}
 
   @Post(':id')
@@ -25,7 +25,12 @@ export class UserController {
     @Body() updatedUser: UserEntity,
   ) {
     const id = Number(idString);
-    const oldUser = await this.userRepository.findBy({ id });
+    const oldUser = await this.userRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['room'],
+    });
     if (!oldUser) {
       throw new HttpException('Could not find user', HttpStatus.NOT_FOUND);
     }
@@ -33,14 +38,16 @@ export class UserController {
       ...oldUser,
       ...updatedUser,
     };
-    const savedUsers = await this.userRepository.save(newUser);
-    const savedUser = savedUsers['0'];
+    const savedUser = await this.userRepository.save(newUser);
     if (!savedUser) {
       throw new HttpException(
         'Could not save',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+
+    this.roomsGateway.refreshRoom(oldUser.room.code);
+
     return savedUser;
   }
 }
