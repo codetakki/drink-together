@@ -10,8 +10,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomEntity } from '../entity/room.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserEntity } from 'src/user/user.entity';
+import { DrinkEntity } from 'src/drink/drink.entity';
 
 @Controller('room')
 export class RoomController {
@@ -19,7 +20,9 @@ export class RoomController {
     @InjectRepository(RoomEntity)
     private roomRepository: Repository<RoomEntity>,
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>,    
+    @InjectRepository(DrinkEntity)
+    private drinkRepository: Repository<DrinkEntity>,
   ) {}
 
   /**
@@ -35,11 +38,19 @@ export class RoomController {
     if (!params.code) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }
-
-    return await this.roomRepository.findOneBy({
+    const room = await this.roomRepository.findOneBy({
       code: params.code,
     });
+    if (!room) {
+      throw new HttpException('Could not find room', HttpStatus.NOT_FOUND);
+    }
+    room.users?.sort((a, b) => {
+      // Sort descending (highest promille first)
+      return b.promilleAmount - a.promilleAmount;
+    });
+    return room;
   }
+
   @Post('/create')
   async createNewRoom(): Promise<RoomEntity> {
     const randomCode = generateRandomCode();
@@ -97,8 +108,36 @@ export class RoomController {
     });
     return;
   }
+
+  @Post('/add-drinks')
+  async addDrinks(@Body() updateDrinksData: AddDrinksDTO) {
+    const { players, drink } = updateDrinksData;
+    const users = await this.userRepository.find({
+      where: {
+        id: In(players),
+      },
+      relations: ['drinks'],
+    });
+    const updatedUsers: UserEntity[] = users.map((user) => {
+      if (!user.drinks) {
+        user.drinks = [];
+      }
+      const newDrink = this.drinkRepository.create(drink);
+      user.drinks.push(newDrink);
+      return user;
+    });
+    const result = await this.userRepository.save(updatedUsers);
+    return {
+      message: 'Drinks added successfully to users.',
+      updatedUsers: result,
+    };
+  }
 }
 
+interface AddDrinksDTO {
+  players: UserEntity['id'][];
+  drink: DrinkEntity;
+}
 function generateRandomCode(length: number = 6): string {
   // 1. Define the pool of characters: all letters (case-sensitive) and digits
   const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + '0123456789';

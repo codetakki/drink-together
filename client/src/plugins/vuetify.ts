@@ -15,6 +15,13 @@ import 'vuetify/styles'
 export default createVuetify({
   theme: {
     defaultTheme: 'dark',
+    themes: {
+      dark: {
+        colors: {
+          primary: '#8e0d0bff',
+        },
+      },
+    },
   },
   defaults: {
 

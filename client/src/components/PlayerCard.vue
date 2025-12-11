@@ -2,7 +2,11 @@
   <v-card
     :key="player.id"
     variant="outlined"
+    @click=""
   >
+    <v-dialog activator="parent">
+      <inspect-player :model-value="{...player}" />
+    </v-dialog>
     <template #prepend>
       <v-avatar v-if="index == 0" color="yellow-darken-1">
         <v-icon icon="mdi-trophy" />
@@ -22,8 +26,20 @@
         <div>{{ player.name }}</div>
       </div>
     </template>
-    <template #subtitle>13‰</template>
-    <template #append> <v-btn color="default" icon="mdi-plus " size="small" variant="outlined" /></template>
+    <template #subtitle>
+      <div class="d-flex align-center">
+        <div class="d-flex align-center">
+          <v-icon icon="mdi-liquor" size="x-small" />
+          <span>&nbsp;{{ player.drinks?.length || 0 }}
+          </span>
+        </div>
+        <div class="mx-2">|</div>
+        <div class="d-flex align-center">
+          <span>{{ player?.drinks?.reduce((currentAmount, currentDrink) => currentAmount += currentDrink.amountMl, 0) }} ml</span>
+        </div>
+      </div>
+    </template>
+    <template #append><div class="text-h5 font-weight-black">{{ ( (player.promilleAmount || 0) * 10).toFixed(1) }} ‰</div> </template>
   </v-card>
 </template>
 

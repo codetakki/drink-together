@@ -1,7 +1,9 @@
+import { UserEntity } from 'src/user/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -21,4 +23,7 @@ export class DrinkEntity {
 
   @CreateDateColumn()
   createdAt: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.drinks)
+  user: UserEntity;
 }

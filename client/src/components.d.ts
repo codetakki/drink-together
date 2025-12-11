@@ -14,9 +14,13 @@ declare module 'vue' {
     AddDrink: typeof import('./components/AddDrink.vue')['default']
     AddPlayer: typeof import('./components/AddPlayer.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    Confirm: typeof import('./components/Confirm.vue')['default']
     DrinkForm: typeof import('./components/DrinkForm.vue')['default']
+    EditPlayer: typeof import('./components/EditPlayer.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    InspectPlayer: typeof import('./components/InspectPlayer.vue')['default']
     PlayerCard: typeof import('./components/PlayerCard.vue')['default']
+    PlayerForm: typeof import('./components/PlayerForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

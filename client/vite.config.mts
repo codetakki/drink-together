@@ -9,6 +9,7 @@ import VueRouter from 'unplugin-vue-router/vite'
 // Utilities
 import { defineConfig } from 'vite'
 
+import vueDevTools from 'vite-plugin-vue-devtools'
 import Layouts from 'vite-plugin-vue-layouts-next'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
@@ -16,6 +17,8 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineConfig({
 
   plugins: [
+    vueDevTools(),
+
     VueRouter({
       dts: 'src/typed-router.d.ts',
     }),
