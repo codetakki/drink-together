@@ -2,7 +2,9 @@
   <div v-if="store.roomData" class="d-flex flex-column" style="overflow-y: hidden; height: 100vh;">
     <v-toolbar density="compact">
       <template #prepend><v-btn color="default" icon="mdi-arrow-left" to="/" /></template>
-      <v-toolbar-title :text="store.roomData?.name" />
+      <v-toolbar-title :text="'Room: ' + store.roomData?.code">
+        <v-btn v-if="isSupported" color="default" icon="mdi-share-variant" @click="shareRoom" />
+      </v-toolbar-title>
       <AddPlayer :room-code="store.roomData?.code" @done="store.fetchRoom()" />
     </v-toolbar>
     <div class="overflow-auto pa-4 h-100">
@@ -31,12 +33,19 @@
 </template>
 
 <script setup lang="ts">
-  import type { Room } from '@/types'
-  import { reactifyObject } from '@vueuse/core'
-  import { io } from 'socket.io-client'
-  import { appFetch, useAppStore } from '@/stores/app'
+  import { useShare } from '@vueuse/core'
+
+  import { useAppStore } from '@/stores/app'
 
   const store = useAppStore()
+  const { share, isSupported } = useShare()
+  function shareRoom () {
+    share({
+      title: 'Join drinking room!',
+      text: 'Join the room and start tracking your drinks',
+      url: location.href,
+    })
+  }
   // 1. Connect
 </script>
 
