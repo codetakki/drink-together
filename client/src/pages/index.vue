@@ -17,13 +17,17 @@
           @click="createRoom()"
         >Create Room</v-btn>
       </v-card-text>
+      <v-divider>Visited rooms</v-divider>
+      <div class="d-flex flex-column overflow-scroll" style="max-height: 300px;">
+        <v-list :items="store.visitedRoomsCodes" @click:select="router.push('/room/'+$event.id)" />
+      </div>
     </v-card>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { useRouter } from 'vue-router'
-  import { appFetch } from '@/stores/app'
+  import { appFetch, useAppStore } from '@/stores/app'
   const roomCode = ref<string>('')
   const router = useRouter()
   const { execute: createRoom, isFetching }
@@ -42,4 +46,5 @@
     if (!formValid.value) return
     router.push('/room/' + roomCode.value)
   }
+  const store = useAppStore()
 </script>

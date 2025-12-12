@@ -1,5 +1,5 @@
 import type { Room } from '@/types'
-import { createFetch, useFetch } from '@vueuse/core'
+import { createFetch, useFetch, useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { io } from 'socket.io-client'
 
@@ -37,6 +37,7 @@ export const useAppStore = defineStore('app', {
       }
       if ('roomId' in route.params) {
         socket.emit('join-room', route.params.roomId)
+
         return
       }
       socket.emit('leave-all-rooms')
@@ -50,7 +51,15 @@ export const useAppStore = defineStore('app', {
     const { data: roomData, execute: fetchRoom, isFetching } = appFetch<Room>(
       roomUrl, { refetch: true, immediate: true },
     ).get().json<Room>()
-
+    const visitedRoomsCodes = useLocalStorage<string[]>('app-visited-rooms-codes', [])
+    watch(roomData, value => {
+      if (!value || !value.code) {
+        return
+      }
+      if (!visitedRoomsCodes.value.includes(value.code)) {
+        visitedRoomsCodes.value.push(value.code)
+      }
+    })
     socket.on('refresh-room', fetchRoom)
 
     return {
@@ -59,6 +68,7 @@ export const useAppStore = defineStore('app', {
       roomCode,
       fetchRoom,
       isFetching,
+      visitedRoomsCodes,
     }
   },
 })
