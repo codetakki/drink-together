@@ -20,7 +20,7 @@
     </v-card>
   </div>
   <template v-if="!store.roomData">
-    <div class="w-100 d-flex flex-column align-center justify-center" style="overflow-y: hidden; height: 100vh;">
+    <div class="w-100 d-flex flex-column align-center justify-center" style="overflow-y: hidden; height: 100dvh;">
       <div v-if="!store.isFetching" class="d-flex flex-column align-center">
         <div class="text-h4 mb-5">No room with code {{ store.roomCode }} found </div>
         <v-btn size="x-large" to="/">Back to start</v-btn>
